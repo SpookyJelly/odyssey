@@ -3,7 +3,23 @@ from config import URL,RAPID_API_KEY,RAPID_API_HOST
 from fastapi import FastAPI, HTTPException
 from typing import Union
 import json
-from pprint import pprint
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+    tags: list[str] = []
+
+
+class Message(BaseModel):
+	message: str
+	message_count: float
+	detail_message: str | None = None
+
 
 
 app = FastAPI()
@@ -68,6 +84,17 @@ def read_main():
 	except requests.exceptions.HTTPError as e:
 		raise HTTPException(status_code=400,detail='error occured')
 
+@app.post("/items/", status_code=201)
+async def create_item(name: str):
+	if(name != 'lorem'):
+		return {"name": name}
+	raise HTTPException(status_code=404, detail="Item not found")
+ 
 
-
-
+# response_model 지정으로 각 status마다 다른 스키마가 보일수 있도록 지정 가능 -> 여기서는 일반 response : Item 스키마, 404 일때는 Message 스키마
+@app.get("/items/{item_id}", response_model=Item, responses={404: {"model": Message}})
+async def read_item(item_id: str):
+    if item_id == "foo":
+        return {"id": "foo", "value": "there goes my hero"}
+    else:
+        return JSONResponse(status_code=404, content={"message": "Item not found"})
