@@ -57,18 +57,7 @@ class Joke():
 		setattr(self,k,v)
 
 
-	# return instance value as dict
-	def broken_arrow(self):
-		return {
-			'id':self.id,
-			'value':self.value,
-			'icon_url':self.icon_url,
-			'url':self.url,
-			'updated_at':self.updated_at,
-			'created_at':self.created_at,
-			'categories':self.categories
-			
-			}
+
 	
 	
 
@@ -98,15 +87,7 @@ def get_joke():
 def world():
 	try:
 		response = get_joke().json()
-		# print('response',response)
-		a = Joke(response)
-		print(a.getTest())
-		print('a',a.id)
-		print(a.value)
-		print(a.categories)
-		print(Joke(response))
 		return (Joke(response))
-		# return Joke(response)
 	except requests.exceptions.HTTPError as e:
 		print('http Error?!', e)
 		status_code = e.response.status_code
