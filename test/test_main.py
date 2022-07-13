@@ -1,9 +1,10 @@
 from config import URL,LOCAL_URL
 import responses
-from app.main import get_joke,app,Joke
+from app.main import get_joke,app
 import logging
 from fastapi.testclient import TestClient
 import requests
+from app.models.dto import Joke
 
 
 logger = logging.getLogger('test')
