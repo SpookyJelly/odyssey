@@ -54,12 +54,12 @@ def test_joke_disabled():
     logger.debug(vars(Joke(disabled_json_list[0])))
     assert vars(Joke(disabled_json_list[0])) == {
         'id':'1',
-        'value':'lorem',
-        'categories':'lorem',
-        'icon_url':'lorem',
-        'url':'lorem',
-        'updated_at':'lorem',
-        'created_at':'lorem',
+        'value':None,
+        'categories':None,
+        'icon_url':None,
+        'url':None,
+        'updated_at':None,
+        'created_at':None,
     }
 
 

@@ -7,7 +7,32 @@ from typing import Union
 import json
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from app.db.models import doc_joke, doc_error_response
+from app.models.models import doc_joke, doc_error_response
+
+"""
+db session
+"""
+from app.db.db_conn import engineconn
+from app.db.db_class import JokeTable
+
+
+app = FastAPI()
+
+engine = engineconn()
+session = engine.sessionmaker()
+
+@app.get('/db')
+async def db_get():
+	example = session.query(JokeTable).all()
+	return example
+
+
+@app.post('/db/post')
+async def db_post():
+	addMemo = JokeTable(id=None,value='lorem')
+	session.add(addMemo)
+	session.commit()
+	return {'message':'hoi!'}
 
 class Item(BaseModel):
     name: str
@@ -24,7 +49,6 @@ class Message(BaseModel):
 
 
 
-app = FastAPI()
 
 """
 categories : Array<string>
@@ -38,20 +62,20 @@ value: string
 
 class Joke():
 	# 일부 값은 None으로 유니온 해도 될까?
-	id:str
-	value:str
-	icon_url:str
-	url:str
-	updated_at:str
-	created_at:str
-	categories:str
+	id:str | None
+	value:str | None
+	icon_url:str | None
+	url:str | None
+	updated_at:str | None
+	created_at:str | None
+	categories:str | None
 	def __init__(self, response_dict:dict):
 		for arg in ['id','value','categories','icon_url','updated_at','created_at','url']:
 			if arg in response_dict:
 				self.__setitem__(arg,response_dict[arg])
 				pass
 			else:
-				self.__setitem__(arg,'lorem')
+				self.__setitem__(arg,None)
 
 	def __setitem__ (self,k,v):
 		setattr(self,k,v)
@@ -61,9 +85,6 @@ class Joke():
 	
 	
 
-# 요청 보내는 부분과 그걸 인스턴스로 바꾸는건 또 다른 함수로 빼야한다.
-# 그래야 테스트가 쉬움
-# 그것도 따로 테스트로
 def get_joke():
 	headers = {
 	"accept": "application/json",
@@ -73,11 +94,6 @@ def get_joke():
 
 	#기본적으로 python의 request 모듈은 동기처리를 한
 	return requests.request("GET",URL,headers=headers)
-
-	# get_joke 에서 try except 처리가 필요
-	# 그러면 코드레벨에서 강제로 에러를 만들어야하나늗네...
-	#try
-	# except : httpException 하고 testcode 자체에서도 분기처리?
 
 
 
@@ -93,6 +109,20 @@ def world():
 		status_code = e.response.status_code
 		raise HTTPException(status_code=status_code, detail="Item not found")
 
+
+"""
+번역된 내용을 DB에 넣기.
+"""
+
+"""
+
+"""
+
+"""
+
+for response test
+
+"""
 @app.get('/hello')
 def read_main():
 	try:
