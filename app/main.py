@@ -11,7 +11,7 @@ from app.models.dto import Joke
 db session
 """
 from app.db.db_conn import engineconn
-from app.db.db_class import JokeTable
+from app.db.db_class import joke_table
 
 """
 consider add api router
@@ -34,7 +34,7 @@ app.add_middleware(
 
 @app.get('/db')
 async def db_get():
-	example = session.query(JokeTable).all()
+	example = session.query(joke_table).all()
 	return example
 
 class Post(BaseModel):
@@ -44,7 +44,7 @@ class Post(BaseModel):
 # @app.post('/db/post',responses={200:{'model':doc_joke}})
 @app.post('/db/post')
 async def db_post(post:Post):
-	addMemo = JokeTable(id=None, value= post.value)
+	addMemo = joke_table(id=None, value= post.value)
 	session.add(addMemo)
 	session.commit()
 	return post
