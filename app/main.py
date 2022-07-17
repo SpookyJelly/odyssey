@@ -94,7 +94,7 @@ def get_simple_joke():
 	except requests.exceptions.HTTPError as e:
 		print('http Error?!', e)
 		status_code = e.response.status_code
-		raise HTTPException(status_code=status_code, detail="Item not found")
+		raise HTTPException(status_code=status_code, detail="external server error")
 
 
 """
