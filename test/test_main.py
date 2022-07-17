@@ -1,11 +1,14 @@
-from config import URL,LOCAL_URL
+from config import LOCAL_URL
 import responses
-from app.main import get_joke,app
+from app.main import app
 import logging
 from fastapi.testclient import TestClient
 import requests
 from app.models.dto import Joke
+import pytest
 
+#db 연동 테스트는 어떻게 만들지...
+# sqlalchemy와 연동이 가능은 하다고 하는데, 그 레벨까지 테스트가 필요한 상황인가???
 
 logger = logging.getLogger('test')
 client = TestClient(app)
@@ -85,3 +88,19 @@ def test_error():
 
         assert resp.status_code == 400
         assert resp.json() == {"detail":"error occured"}
+
+@responses.activate
+def test_post_id_not_exist():
+    ref_id = "BULLSHIT"
+
+    responses.add(
+        responses.POST, 
+        f"{LOCAL_URL}/translate/{ref_id}",
+        json={'detail':"ID doesn't exist"},
+        status=404
+        )
+
+
+    resp = requests.post(f"{LOCAL_URL}/translate/{ref_id}")
+    assert resp.json() == {'detail':"ID doesn't exist"}
+    assert resp.status_code == 404

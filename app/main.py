@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.dto import Joke, KorJoke
-from app.models.doc import doc_joke, doc_error_response
-from app.db.db_query import insert_joke_table, select_all_joke_table,select_all_kor_joke_table,select_kor_joke_by_id,select_joke_by_id
+from app.models.doc import doc_joke, doc_response
+from app.db.db_query import delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_table,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id
 from app.utils.request import get_joke
 
 
@@ -26,16 +26,15 @@ app.add_middleware(
 	allow_headers=["*"]
 	)
 
+class post_kor_joke(BaseModel):
+	value:str
+
+
+
 @app.get('/db')
 async def db_get():
 	return select_joke_by_id('abc')
-	# print(select_all_joke_table())
-	# return select_all_kor_joke_table()
-	# example = session.query(joke_table).all()
-	# return example
 
-# class Post(BaseModel):
-# 	value:str
 
 # # example 
 # # @app.post('/db/post',responses={200:{'model':doc_joke}})
@@ -73,20 +72,25 @@ async def db_get():
 
 
 
-@app.get('/',responses={200:{"model":doc_joke},404:{"model":doc_error_response}})
-def world():
+@app.get('/',responses={200:{"model":doc_joke},404:{"model":doc_response}})
+def get_simple_joke():
 	try:
 		response:Joke = get_joke().json()
-		kor_res:list[KorJoke] = select_kor_joke_by_id(response['id'])
+		kor_res:list[KorJoke] = select_kor_joke_by_ref_id(response['id'])
 		if(not kor_res):
 			en_res:Joke = select_joke_by_id(response['id'])
 			if (not en_res):
 				insert_joke_table(Joke(response))
-		return {'w':'h'}
-		# if first -> return list[KorJoke]
-		# return kor_res[0]
+			return {
+				"ENG":response,
+				"KOR":[]
+			}
+		# return value when translate value exist
+		return {
+			"ENG":response,
+			"KOR": kor_res
+			}
 
-		return (Joke(response))
 	except requests.exceptions.HTTPError as e:
 		print('http Error?!', e)
 		status_code = e.response.status_code
@@ -97,9 +101,23 @@ def world():
 번역된 내용을 DB에 넣기.
 """
 
-"""
 
-"""
+
+#LptnivN7RPGsN3b-fSbzZA
+@app.post("/translate/{ref_id}",responses={200:{"model":doc_response},404:{"model":doc_response}})
+async def write_translated_joke(ref_id:str,post:post_kor_joke):
+	eng_joke = select_joke_by_id(ref_id)
+	if(not eng_joke):
+		raise HTTPException(status_code=404, detail="ID doesn't exist")
+	return insert_kor_joke_table(ref_id,post.value)
+
+@app.delete("/translate/{id}",responses={200:{"model":doc_response},404:{"model":doc_response}})
+async def delete_translated_joke(id:int):
+	kor_joke = select_kor_joke_by_id(id)
+	if(not kor_joke):
+		raise HTTPException(status_code=404 , detail=f"ID {id} kor joke doesn't exist")
+	#try catch?
+	return delete_kor_joke_table(id)
 
 """
 
