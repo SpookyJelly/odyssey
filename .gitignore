@@ -206,4 +206,7 @@ cython_debug/
 # Ignore code-workspaces
 *.code-workspace
 
+#node
+node_modules
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,linux,python
