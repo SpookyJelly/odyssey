@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.dto import Joke, KorJoke
 from app.models.doc import doc_joke, doc_response
-from app.db.db_query import delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_table,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id
+from app.db.db_query import count_joke_table, delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_table,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id, select_random_joke_table
 from app.utils.request import get_joke
 
 
@@ -68,14 +68,18 @@ async def db_get():
 # 	#기본적으로 python의 request 모듈은 동기처리를 한
 # 	return requests.request("GET",URL,headers=headers)
 
-
+@app.get('/test')
+def testing_random():
+	print(count_joke_table())
+	return select_random_joke_table()
 
 
 
 @app.get('/',responses={200:{"model":doc_joke},404:{"model":doc_response}})
 def get_simple_joke():
 	try:
-		response:Joke = get_joke().json()
+		# use web api unless db record less than 100
+		response:Joke = get_joke().json() if count_joke_table() <= 100 else vars(select_random_joke_table())
 		kor_res:list[KorJoke] = select_kor_joke_by_ref_id(response['id'])
 		if(not kor_res):
 			en_res:Joke = select_joke_by_id(response['id'])

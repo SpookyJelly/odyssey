@@ -25,7 +25,7 @@ class JokeTable(Base):
 
 class JokeTableKOR(Base):
     __tablename__='kor_joke'
-    id = Column(INT, nullable=False, autoincrement = True, primary_key= True)
+    id = Column(INT(), nullable=False, autoincrement = True, primary_key= True)
     ref_id = Column(VARCHAR(128),ForeignKey('joke.id'))
     value = Column(VARCHAR(256), nullable= False)
-    score = Column(SMALLINT, default=0)
+    score = Column(SMALLINT(), default=0)

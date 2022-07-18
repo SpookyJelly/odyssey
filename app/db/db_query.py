@@ -2,9 +2,17 @@ from sqlalchemy import select,desc,delete
 from app.db.db_conn import engineconn
 from app.db.db_class import JokeTable,JokeTableKOR
 from app.models.dto import Joke, KorJoke
+from  sqlalchemy.sql.expression import func, select
 
 engine = engineconn()
 session = engine.sessionmaker()
+
+def count_joke_table():
+    #query object의 scalar 메서드를 사용하면 쿼리로 선택된 레코드를 스칼라 서브쿼리로 바꿔서 준다
+    return session.query(func.count(JokeTable.id)).scalar()
+
+def select_random_joke_table():
+    return session.query(JokeTable).order_by(func.random()).limit(1).first()
 
 def select_all_joke_table():
     return session.query(JokeTable).all()
