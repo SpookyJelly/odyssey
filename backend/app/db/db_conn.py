@@ -2,20 +2,19 @@
 sqlalchemy+pymysql로 DB랑 연결
 
 """
-
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database,database_exists
 from app.db.db_class import JokeTable, JokeTableKOR
 from app.utils.path import read_root_json
 
-secrets = read_root_json('secrets.json')
-
-
-DB = secrets['DB']
-
-DB_URL = f"mysql+pymysql://{DB['user']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['database']}?charset=utf8"
-
+if(not os.getenv('PROD')):
+    secrets = read_root_json('secrets_dev.json')
+    DB = secrets['DB']
+    DB_URL = f"mysql+pymysql://{DB['user']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['database']}?charset=utf8"
+else:
+    DB_URL = os.environ['CLEARDB_DATABASE_URL']
 class engineconn:
     def __init__(self):
         # create database if not exist
