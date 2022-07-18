@@ -9,6 +9,7 @@ from sqlalchemy_utils import create_database,database_exists
 from app.db.db_class import JokeTable, JokeTableKOR
 from app.utils.path import read_root_json
 
+
 if(not os.getenv('PROD')):
     secrets = read_root_json('secrets_dev.json')
     DB = secrets['DB']
