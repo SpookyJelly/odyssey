@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,linux,python
 
 ## config
-secrets.json
+secrets*.json
 
 ### Linux ###
 *~
