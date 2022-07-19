@@ -16,6 +16,6 @@ def get_joke():
     headers = {
         "accept":"application/json",
         "X-RapidAPI-Key":API['apiKey'],
-        "X-RapidAPI-Host":API['apiHost']
+        "X-RapidAPI-Host":API['apihost']
     }
     return requests.request("GET",API['apiUrl'],headers=headers)
