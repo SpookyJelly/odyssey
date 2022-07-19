@@ -24,8 +24,8 @@ class engineconn:
         self.engine = create_engine(DB_URL,pool_recycle=500)
         # create table if don't exist (using declartive model)
         # checkfirst <-- check table before execute create query
-        JokeTable.__table__.create(self.engine,checkfirst=True)
-        JokeTableKOR.__table__.create(self.engine,checkfirst=True)
+        JokeTable.__table__.create(bind=self.engine,checkfirst=True)
+        JokeTableKOR.__table__.create(bind=self.engine,checkfirst=True)
     
     def sessionmaker(self):
         Session = sessionmaker(bind=self.engine,autocommit=False, autoflush=False)
