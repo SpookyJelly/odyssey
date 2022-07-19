@@ -15,7 +15,7 @@ if(not os.getenv('PROD')):
     DB = secrets['DB']
     DB_URL = f"mysql+pymysql://{DB['user']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['database']}?charset=utf8"
 else:
-    DB_URL = os.environ['CLEARDB_DATABASE_URL']
+    DB_URL = os.environ['JAWSDB_URL']
 class engineconn:
     def __init__(self):
         # create database if not exist
