@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import axios from "axios";
+import { config } from "./config/config";
 
 function App() {
   const [joke, setJoke] = useState<string>("Odyssey");
@@ -10,7 +11,8 @@ function App() {
   const getSimpleJoke = async () => {
     try {
       if (ref.current) ref.current.className = "logo";
-      const res = await axios.get("http://localhost:8000");
+      const URL = config.serverUrl;
+      const res = await axios.get(URL);
       const joke = res.data.ENG.value;
       setJoke(joke);
     } catch (e) {
