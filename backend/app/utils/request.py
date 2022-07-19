@@ -8,7 +8,7 @@ if(not os.getenv('PROD')):
 else:
     API = {
         'apiKey': os.getenv('RAPID_API_KEY'),
-        'apihost': os.getenv('RAPID_API_HOST'),
+        'apiHost': os.getenv('RAPID_API_HOST'),
         'apiUrl': os.getenv('RAPID_API_URL')
     }
 
@@ -16,6 +16,6 @@ def get_joke():
     headers = {
         "accept":"application/json",
         "X-RapidAPI-Key":API['apiKey'],
-        "X-RapidAPI-Host":API['apihost']
+        "X-RapidAPI-Host":API['apiHost']
     }
     return requests.request("GET",API['apiUrl'],headers=headers)
