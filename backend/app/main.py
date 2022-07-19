@@ -16,7 +16,7 @@ consider add api router
 app = FastAPI()
 
 
-origins= ["http://localhost","http://localhost:3000","https://spookyjelly.github.io/odyssey/*"]
+origins= ["http://localhost","http://localhost:3000","https://spookyjelly.github.io"]
 
 app.add_middleware(
 	CORSMiddleware,
