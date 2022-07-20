@@ -24,13 +24,22 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <img ref={ref} src={reactLogo} />
+      <header>
+        <button>test</button>
         <div>
-          <p className="typo">{joke}</p>
+          <p>asdasd</p>
         </div>
-      </div>
-      <button onClick={getSimpleJoke}>Get Daily Joke</button>
+      </header>
+      <section>
+        <div>
+          <img ref={ref} src={reactLogo} />
+          <div>
+            <p className="typo">{joke}</p>
+          </div>
+        </div>
+        <button onClick={getSimpleJoke}>Get Daily Joke</button>
+      </section>
+      <footer></footer>
     </div>
   );
 }
