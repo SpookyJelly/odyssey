@@ -25,9 +25,11 @@ function App() {
   return (
     <div className="App">
       <header>
-        <button>test</button>
-        <div>
-          <p>asdasd</p>
+        <button style={{ cursor: "default" }}>TODOS</button>
+        <div className="todo-card">
+          <li>lorem</li>
+          <li>lorem2</li>
+          <li>lorem3</li>
         </div>
       </header>
       <section>
