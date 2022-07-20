@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import reactLogo from "./assets/react.svg";
-import "./App.css";
+import "./App.scss";
 import axios from "axios";
 import { config } from "./config/config";
 
@@ -12,7 +12,7 @@ function App() {
     try {
       if (ref.current) ref.current.className = "logo";
       const URL = config.serverUrl;
-      const res = await axios.get(URL);
+      const res = await axios.get(`${URL}/api/random`);
       const joke = res.data.ENG.value;
       setJoke(joke);
     } catch (e) {
@@ -26,7 +26,9 @@ function App() {
     <div className="App">
       <div>
         <img ref={ref} src={reactLogo} />
-        <p>{joke}</p>
+        <div>
+          <p className="typo">{joke}</p>
+        </div>
       </div>
       <button onClick={getSimpleJoke}>Get Daily Joke</button>
     </div>
