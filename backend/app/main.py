@@ -69,7 +69,7 @@ def testing_random():
 def get_simple_joke():
 	try:
 		# use web api unless db record less than 100
-		response:Joke = get_joke().json() if count_joke_table() <= 1 else vars(select_random_joke_table())
+		response:Joke = get_joke().json() if count_joke_table() <= 100 else vars(select_random_joke_table())
 		kor_res:list[KorJoke] = select_kor_joke_by_ref_id(response['id'])
 		if(not kor_res):
 			en_res:Joke = select_joke_by_id(response['id'])

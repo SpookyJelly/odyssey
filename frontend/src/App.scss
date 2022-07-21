@@ -13,11 +13,54 @@
     header {
       position: relative;
       margin-left: auto;
+      .todo-btn-wrapper {
+        padding-bottom: 20px;
+        text-align: start;
+      }
+
+      .todo-btn-wrapper:hover + .todo-card {
+        opacity: 1;
+        margin-right: 0px;
+      }
+
       .todo-card {
+        text-align: start;
+        opacity: 0;
+        margin-right: -100px;
+        width: 250px;
         position: absolute;
         right: 0px;
-        border: solid 2px red;
+        border: solid 1px black;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #64646452;
+        transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        li span {
+          float: right;
+        }
       }
+    }
+  }
+
+  section {
+    .input-wrapper {
+      transform: scale(0, 0);
+      transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    .input-wrapper.active {
+      width: 500px;
+      height: 100px;
+      transform: scale(1, 1);
+    }
+    .btn {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translate(-50%, 0px);
+      transition: all 0.3s ease-in-out;
+    }
+    .btn.active {
+      margin-top: 100px;
     }
   }
 }
@@ -48,14 +91,6 @@
     animation: type infinite 0.9s linear;
   }
 }
-
-// .test-type {
-//   width: 2px;
-//   height: 100%;
-//   border-right: solid 2px white;
-//   padding-right: 1px;
-//   animation: type infinite 0.9s linear;
-// }
 
 @keyframes type {
   0% {
