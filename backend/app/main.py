@@ -1,14 +1,14 @@
 import requests
 from pydantic import BaseModel
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Form
 from fastapi.responses import JSONResponse,HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.models.dto import Joke, KorJoke
 from app.models.doc import doc_joke, doc_response
-from app.db.db_query import count_joke_table, delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_table,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id, select_random_joke_table
+from app.db.db_query import count_joke_table, delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_by_id,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id, select_random_joke_table
 from app.utils.request import get_joke
 from definitions import ROOT_DIR
 
@@ -51,8 +51,8 @@ def main():
 
 
 @app.get('/api/search/{id}')
-async def db_get(id:str):
-	return select_joke_by_id(id)
+async def get_ENG_joke_and_KOR_joke_by_id(id:str):
+	return select_all_joke_by_id(id)
 
 
 
@@ -99,11 +99,13 @@ def get_simple_joke():
 
 #LptnivN7RPGsN3b-fSbzZA
 @app.post("/api/translate/{ref_id}",responses={200:{"model":doc_response},404:{"model":doc_response}})
-async def write_translated_joke(ref_id:str,post:post_kor_joke):
+# async def write_translated_joke(ref_id:str,post:post_kor_joke):
+async def write_translated_joke(ref_id:str,value:str = Form()):
 	eng_joke = select_joke_by_id(ref_id)
+	print('value',value)
 	if(not eng_joke):
 		raise HTTPException(status_code=404, detail="ID doesn't exist")
-	return insert_kor_joke_table(ref_id,post.value)
+	return insert_kor_joke_table(ref_id,value)
 
 @app.delete("/api/translate/{id}",responses={200:{"model":doc_response},404:{"model":doc_response}})
 async def delete_translated_joke(id:int):

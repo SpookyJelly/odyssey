@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, FormEvent } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.scss";
-import { getRandomJoke } from "./services/request";
+import { getRandomJoke, translateJoke } from "./services/request";
 import { findProperJokefromResponse } from "./utils/finder";
 import { JokeResponse } from "./models/VO";
 
@@ -9,7 +9,11 @@ function App() {
   //NOTE: 변경, 추가 등 다방면으로 활용할 여지가 있어 상태로 관리
   const [jokeResponse, setJokeResponse] = useState<JokeResponse>();
   const [inputVisiable, setInputVisiable] = useState<boolean>(false);
-  const [joke, setJoke] = useState<string>("Odyssey");
+  // const [joke, setJoke] = useState<string>("Odyssey");
+  const [joke, setJoke] = useState<{ id: string; value: string }>({
+    id: "init",
+    value: "Odyssey",
+  });
   const ref = useRef<HTMLImageElement>(null);
 
   const getSimpleJoke = async () => {
@@ -20,7 +24,8 @@ function App() {
       const jokeObj = findProperJokefromResponse(response);
       //NOTE: check timing of jokeresponse
       setJokeResponse(response);
-      setJoke(jokeObj.value);
+      // korJoke는 id가 number이므로 변환.
+      setJoke({ id: String(jokeObj.id), value: jokeObj.value });
       setInputVisiable(jokeObj.lang === "ENG" ? true : false);
     } catch (e) {
       console.log("e", e);
@@ -28,11 +33,16 @@ function App() {
       if (ref.current) ref.current.className = "";
     }
   };
-  const tester = (state: boolean) => {
-    return state ? "block" : "none";
-  };
-  const testing = (state: boolean) => {
+
+  const stateToActive = (state: boolean) => {
     return state ? "active" : "";
+  };
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(e.target);
+    const data = new FormData(e.target as HTMLFormElement);
+    console.log("joke Obj", jokeResponse);
+    translateJoke(joke.id, data);
   };
 
   return (
@@ -61,23 +71,38 @@ function App() {
         <div>
           <img ref={ref} src={reactLogo} />
           <div>
-            <p className="typo">{joke}</p>
+            <p className="typo">{joke.value}</p>
           </div>
           <div id="holder" style={{ position: "relative" }}>
-            <div className={`input-wrapper ${testing(inputVisiable)}`}>
-              <p>Lorem ipsum dolor sit.</p>
-              <input />
+            <div className={`input-wrapper ${stateToActive(inputVisiable)}`}>
+              <form action="" onSubmit={handleSubmit} name="submitForm">
+                <p>Lorem ipsum dolor sit.</p>
+                <textarea
+                  placeholder="give me a proper translate"
+                  name="value"
+                />
+                <div className="submit-btn-container">
+                  <div className="dummy"></div>
+                  <div className="content">
+                    <button className="submit-btn" type="submit">
+                      test
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
             <button
               onClick={getSimpleJoke}
-              className={`btn ${testing(inputVisiable)}`}
+              className={`joke-btn ${stateToActive(inputVisiable)}`}
             >
               Get Daily Joke
             </button>
           </div>
         </div>
       </section>
-      <footer></footer>
+      <footer>
+        <span>Spookyjelly</span>
+      </footer>
     </div>
   );
 }

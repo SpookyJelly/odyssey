@@ -16,3 +16,12 @@ export const getRandomJoke = async () => {
     KOR: KOR.map((elem) => ({ lang: "KOR", ...keyTransformer(elem) })),
   } as VO.JokeResponse;
 };
+
+export const translateJoke = async (refId: string, data: FormData) => {
+  console.log("ref id", refId);
+
+  const response = await axios.post(
+    `${serverUrl}/api/translate/${refId}`,
+    data
+  );
+};
