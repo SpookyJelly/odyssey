@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.models.dto import Joke, KorJoke
 from app.models.doc import doc_joke, doc_response
-from app.db.db_query import count_joke_table, delete_kor_joke_table, insert_joke_table, insert_kor_joke_table, select_all_joke_by_id,select_all_kor_joke_table, select_kor_joke_by_id,select_kor_joke_by_ref_id,select_joke_by_id, select_random_joke_table
+from app.db.db_query import *
 from app.utils.request import get_joke
 from definitions import ROOT_DIR
 
