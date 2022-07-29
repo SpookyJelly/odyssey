@@ -6,6 +6,7 @@ import { findProperJokefromResponse } from "./utils/finder";
 import { JokeResponse } from "./models/VO";
 import { validateHuman } from "./utils/validator";
 
+//TODO: define error handler
 function App() {
   //NOTE: 변경, 추가 등 다방면으로 활용할 여지가 있어 상태로 관리
   const [jokeResponse, setJokeResponse] = useState<JokeResponse>();
@@ -40,9 +41,9 @@ function App() {
   };
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(e.target);
+    // console.log(e.target);
     const data = new FormData(e.target as HTMLFormElement);
-    console.log("joke Obj", jokeResponse);
+    // console.log("joke Obj", jokeResponse);
     const validateResult = await validateHuman();
     if (validateResult) {
       try {
@@ -95,14 +96,14 @@ function App() {
               <form action="" onSubmit={handleSubmit} name="submitForm">
                 <p>Lorem ipsum dolor sit.</p>
                 <textarea
-                  placeholder="give me a proper translate"
+                  placeholder="재미있는 번역 부탁드리겠습니다."
                   name="value"
                 />
                 <div className="submit-btn-container">
                   <div className="dummy"></div>
                   <div className="content">
                     <button className="submit-btn" type="submit">
-                      test
+                      Submit
                     </button>
                   </div>
                 </div>

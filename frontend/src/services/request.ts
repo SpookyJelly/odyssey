@@ -18,10 +18,8 @@ export const getRandomJoke = async () => {
 };
 
 export const translateJoke = async (refId: string, data: FormData) => {
-  console.log("ref id", refId);
+  // console.log("ref id", refId);
 
-  const response = await axios.post(
-    `${serverUrl}/api/translate/${refId}`,
-    data
-  );
+  await axios.post(`${serverUrl}/api/translate/${refId}`, data);
+  //TODO: give proper response
 };
