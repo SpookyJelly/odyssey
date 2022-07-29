@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 export class JellyFactory {
   private _list = [
     ["amount", "unit", "의", "color", "jelly"],
@@ -48,3 +50,25 @@ export class JellyFactory {
     return arr[Math.floor(Math.random() * arr.length)];
   }
 }
+
+export const validateHuman = async (): Promise<boolean> => {
+  const jelly = new JellyFactory().getJelly();
+  const { value: result } = await Swal.fire({
+    title: "코드를 입력해주세요",
+    text: ` ${jelly}`,
+    input: "text",
+    // icon: "question",
+    customClass: "--noselect",
+    inputValidator: (value) => {
+      if (!value) {
+        return "코드를 입력해주세요";
+      }
+      if (value !== jelly) {
+        return "입력 문자가 다릅니다";
+      }
+      return null;
+    },
+  });
+  console.log("result", result);
+  return Boolean(result);
+};

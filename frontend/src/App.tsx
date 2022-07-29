@@ -4,6 +4,7 @@ import "./App.scss";
 import { getRandomJoke, translateJoke } from "./services/request";
 import { findProperJokefromResponse } from "./utils/finder";
 import { JokeResponse } from "./models/VO";
+import { validateHuman } from "./utils/validator";
 
 function App() {
   //NOTE: 변경, 추가 등 다방면으로 활용할 여지가 있어 상태로 관리
@@ -37,12 +38,22 @@ function App() {
   const stateToActive = (state: boolean) => {
     return state ? "active" : "";
   };
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(e.target);
     const data = new FormData(e.target as HTMLFormElement);
     console.log("joke Obj", jokeResponse);
-    translateJoke(joke.id, data);
+    const validateResult = await validateHuman();
+    if (validateResult) {
+      try {
+        translateJoke(joke.id, data);
+      } catch (e) {
+        console.log("e", e);
+      } finally {
+        setInputVisiable(false);
+      }
+    }
+    setInputVisiable(false);
   };
 
   return (
@@ -54,7 +65,7 @@ function App() {
         <div className="todo-card">
           <li>
             유저 번역 기능 추가
-            <span>❌</span>
+            <span>✅</span>
           </li>
           <li>
             타이포 애니메이션 추가 <span>❌</span>
@@ -64,6 +75,12 @@ function App() {
           </li>
           <li>
             투표 기능 추가 <span>❌</span>
+          </li>
+          <li>
+            스테이징 단계 추가 <span>❌</span>
+          </li>
+          <li>
+            리캡챠 추가 <span>❌</span>
           </li>
         </div>
       </header>
