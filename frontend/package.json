@@ -8,21 +8,27 @@
     "build": "tsc && vite build --emptyOutDir",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@sweetalert2/theme-wordpress-admin": "^5.0.11",
     "axios": "^0.27.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.53.0"
+    "sass": "^1.53.0",
+    "sweetalert2": "^11.4.24"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
+    "@vitest/ui": "^0.18.1",
     "gh-pages": "^4.0.0",
     "typescript": "^4.6.4",
-    "vite": "^3.0.0"
+    "vite": "^3.0.0",
+    "vitest": "^0.18.1"
   },
   "homepage": "https://spookyjelly.github.io/odyssey"
 }

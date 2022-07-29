@@ -32,9 +32,13 @@ def select_kor_joke_by_ref_id(id:str):
     # fetchone도 있다.이거하면 그냥 dict으로 온다
     return session.execute(stmt).fetchall()
 
+def select_all_joke_by_id(id:str):
+    stmt = session.query(JokeTable,JokeTableKOR).filter(JokeTableKOR.ref_id == JokeTable.id).filter(JokeTable.id == id).all()
+    return stmt
 def select_joke_by_id(id:str):
     stmt = select("*").where(JokeTable.id == id)
     return session.execute(stmt).fetchone()
+
 
 def insert_joke_table(joke:Joke):
     addMemo = JokeTable(id=joke.id,updated_at=joke.updated_at,url= joke.url, value= joke.value,icon_url=joke.icon_url,categories=str(joke.categories),created_at=joke.created_at )
