@@ -1,4 +1,4 @@
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef, FormEvent, useMemo, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.scss";
 import { getRandomJoke, translateJoke } from "./services/request";
@@ -11,12 +11,48 @@ function App() {
   //NOTE: 변경, 추가 등 다방면으로 활용할 여지가 있어 상태로 관리
   const [jokeResponse, setJokeResponse] = useState<JokeResponse>();
   const [inputVisiable, setInputVisiable] = useState<boolean>(false);
-  // const [joke, setJoke] = useState<string>("Odyssey");
   const [joke, setJoke] = useState<{ id: string; value: string }>({
     id: "init",
     value: "Odyssey",
   });
+  // const [displayJoke, setDisplayJoke] = useState<string>("");
+
+  // doing smt crazy
+  // useEffect(() => {
+  //   setDisplayJoke("");
+  //   const a = joke.value.split(""); // ["O","d",'s'..]
+
+  //   console.log(a);
+  //   a.forEach((e) => {
+  //     console.log("e", e);
+  //     setTimeout(() => setDisplayJoke((prev) => prev.concat(e)), 1000);
+  //     console.log("asdasd");
+  //   });
+  //   console.log("display Joke", displayJoke);
+  // }, [joke]);
+
   const ref = useRef<HTMLImageElement>(null);
+  const displayRef = useRef<HTMLParagraphElement>(null);
+
+  const testing = async (value: string) => {
+    const len = value.length;
+    console.log("display ref", displayRef);
+    console.log("len,joke", len, value);
+    if (displayRef.current) {
+      displayRef.current.innerText = "";
+      for (const elem of value) {
+        displayRef.current.innerText += elem;
+
+        await new Promise((res) => setTimeout(res, 100));
+      }
+      // displayRef.current.innerText = value[0];
+      // const a = await new Promise((res) => setTimeout(res, 1000));
+
+      // displayRef.current.innerText += value[1];
+    }
+  };
+
+  const displayJoke = useMemo(() => testing(joke.value), [joke]);
 
   const getSimpleJoke = async () => {
     try {
@@ -91,6 +127,13 @@ function App() {
           <div>
             <p className="typo">{joke.value}</p>
           </div>
+
+          <div>
+            <p ref={displayRef} style={{ whiteSpace: "break-spaces" }}>
+              testing
+            </p>
+          </div>
+
           <div id="holder" style={{ position: "relative" }}>
             <div className={`input-wrapper ${stateToActive(inputVisiable)}`}>
               <form action="" onSubmit={handleSubmit} name="submitForm">
